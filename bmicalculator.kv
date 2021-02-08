@@ -1,0 +1,95 @@
+#: import utils kivy.utils
+
+ScreenManager:
+    HomeScreen:
+        id: home
+        name: 'home'
+
+<HomeScreen>: # the root is the the HomeScreen class
+    canvas.before:
+        Color:
+            rgb: utils.get_color_from_hex('#333333')
+        Rectangle:
+            size: self.size
+            pos: self.pos
+            
+    FloatLayout:
+        MDToolbar:
+            title: 'BMI calculator'
+            pos_hint: {'center_x': .5, 'center_y': .959}
+            radius: 0, 0, 25, 25
+
+        Image:
+            pos_hint: {'top': .99, 'right': .95}
+            size_hint: .075, .075
+            source: 'images/female.png'
+            halign: 'center'
+
+        Image:
+            pos_hint: {'top': .99, 'right': .85}
+            size_hint: .075, .075
+            source: 'images/male.png'
+            halign: 'center'
+        
+        MDLabel:
+            text: 'choose your height: ' + root.slider_value_txt + ' cm'
+            font_size: '20dp'
+            color: '#ffffff'
+            size_hint: 1, .1
+            pos_hint: {'top': .85}
+            halign: 'center'
+
+        MDSlider:
+            id: height_value
+            min: 90
+            max: 250
+            value: 150
+            size_hint: .99, .025
+            pos_hint: {'top': .75}
+            on_value: root.on_slider_value(self)
+            on_touch_up:
+                root.getvalue()
+            # halign: 'center'
+
+        MDLabel:
+            text: 'choose your weight'
+            font_size: '20dp'
+            color: '#ffffff'
+            pos_hint: {'top': 1.12}
+            halign: 'center'
+
+        MDCard:
+            size: '280dp', '79dp'
+            size_hint: None, None
+            pos_hint: {'center_x': .5, 'center_y': .5}
+            border_radius: 25
+            radius: [25]
+
+            MDIconButton:
+                icon: 'minus'
+                user_font_size: '25dp'
+                on_release:
+                    root.decrease()
+
+            MDLabel:
+                text: str(root.weight) + 'kg'
+                font_size: 35
+                color: 1, 1, 1, 1
+                halign: 'center'
+
+            MDIconButton:
+                icon: 'plus'
+                user_font_size: '25dp'
+                on_release:
+                    root.increase()
+
+        MDFillRoundFlatIconButton:
+            size_hint: .70, None
+            size: '280dp', '40dp'
+            pos_hint: {'top': .3, 'center_x': .5}
+            text: 'calculate BMI'
+            halign: 'center'
+            color: app.theme_cls.primary_color
+            icon: 'weight'
+            on_release:
+                root.calculate_bmi()
